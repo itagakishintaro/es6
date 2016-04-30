@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require( 'gulp' );
+var sourcemaps = require( 'gulp-sourcemaps' );
 // SASS
 var sass = require( 'gulp-sass' );
 var minifycss = require( 'gulp-clean-css' );
@@ -28,8 +29,10 @@ gulp.task( 'sass', function () {
                 } );
             }
         } ) )
+        .pipe( sourcemaps.init() )
         .pipe( concat( 'application.scss' ) )
         .pipe( sass() )
+        .pipe( sourcemaps.write( '.' ) )
         .pipe( gulp.dest( './css' ) );
 } );
 
@@ -47,10 +50,12 @@ gulp.task( 'js', function () {
                 } );
             }
         } ) )
+        .pipe( sourcemaps.init() )
         .pipe( babel( {
             presets: [ 'es2015' ]
         } ) )
         .pipe( concat( 'application.js' ) )
+        .pipe( sourcemaps.write( '.' ) )
         .pipe( gulp.dest( './js' ) );
 } );
 
@@ -73,11 +78,6 @@ gulp.task( 'lib-css', function () {
         .pipe( gulp.dest( './css/' ) );
 } );
 
-gulp.task( 'lib-font', function () {
-    return gulp.src( [] )
-        .pipe( gulp.dest( './font/' ) );
-} );
-
 gulp.task( 'lib-js', function () {
     return gulp.src( [] )
         .pipe( concat( 'lib.min.js' ) )
@@ -85,4 +85,4 @@ gulp.task( 'lib-js', function () {
         .pipe( gulp.dest( './js/' ) );
 } );
 
-gulp.task( 'default', [ 'sass', 'js', 'lib-css', 'lib-font', 'lib-js', 'webserver', 'watch' ] );
+gulp.task( 'default', [ 'sass', 'js', 'lib-css', 'lib-js', 'webserver', 'watch' ] );
